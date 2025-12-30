@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA | Iniciar Sesión</title>
+
+    <!-- Fonts: Inter, Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        neon: {
+                            blue: '#00f3ff',
+                            pink: '#ff00aa',
+                            purple: '#bc13fe',
+                        },
+                        dark: {
+                            bg: '#111111',
+                            surface: '#181818',
+                            card: '#202020',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body class="bg-dark-bg text-gray-200 antialiased font-sans h-screen overflow-hidden flex flex-col">
+
+    <!-- Navbar (Minimal) -->
+    <nav class="fixed top-0 w-full z-50 bg-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                <div class="relative w-14 h-14 flex items-center justify-center group">
+                    <img src="assets/logo.png" alt="PRISMA Logo"
+                        class="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(0,243,255,0.3)] transition-transform group-hover:scale-110 duration-300">
+                </div>
+                <span class="font-display font-bold text-2xl tracking-wide text-white">PRISMA</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-neon-purple/10 rounded-full blur-[100px]">
+        </div>
+        <div class="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-neon-blue/10 rounded-full blur-[100px]">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center px-4 relative">
+
+        <div class="w-full max-w-md animate-fade-in relative">
+
+            <!-- Login Card -->
+            <div
+                class="bg-dark-surface/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-10 shadow-[0_0_40px_rgba(0,0,0,0.3)]">
+
+                <div class="text-center mb-10">
+                    <h1 id="page-title" class="text-3xl font-display font-bold text-white mb-2">Bienvenido</h1>
+                    <p id="page-subtitle" class="text-gray-400">Ingresa tus credenciales para continuar.</p>
+                </div>
+
+                <form id="auth-form" class="space-y-6">
+
+                    <!-- Name Field (Hidden by default, shown for Register) -->
+                    <div id="name-field" class="space-y-2 hidden">
+                        <label for="fullname" class="text-xs uppercase tracking-wider text-gray-500 font-bold">Nombre
+                            Completo</label>
+                        <input type="text" id="fullname" placeholder="Tu Nombre"
+                            class="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-all placeholder-gray-700">
+                    </div>
+
+                    <!-- Avatar Selection (Clone of name-field visibility logic) -->
+                    <div id="avatar-field" class="space-y-3 hidden">
+                        <label class="text-xs uppercase tracking-wider text-gray-500 font-bold">Elige tu Avatar</label>
+                        <div class="flex justify-between gap-4">
+
+
+                            <!-- Option 2: Female-ish -->
+                            <label class="cursor-pointer group relative flex-1">
+                                <input type="radio" name="avatar"
+                                    value="https://api.dicebear.com/9.x/avataaars/svg?seed=Nala&backgroundColor=202020"
+                                    class="peer sr-only">
+                                <div
+                                    class="w-full aspect-square rounded-xl border border-white/10 bg-dark-bg p-2 peer-checked:border-neon-blue peer-checked:bg-neon-blue/10 transition-all group-hover:bg-white/5 flex items-center justify-center">
+                                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Nala&backgroundColor=202020"
+                                        class="w-full h-full rounded-full">
+                                </div>
+                            </label>
+
+                            <!-- Option 3: Male-ish -->
+                            <label class="cursor-pointer group relative flex-1">
+                                <input type="radio" name="avatar"
+                                    value="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&backgroundColor=202020"
+                                    class="peer sr-only">
+                                <div
+                                    class="w-full aspect-square rounded-xl border border-white/10 bg-dark-bg p-2 peer-checked:border-neon-blue peer-checked:bg-neon-blue/10 transition-all group-hover:bg-white/5 flex items-center justify-center">
+                                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&backgroundColor=202020"
+                                        class="w-full h-full rounded-full">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="email" class="text-xs uppercase tracking-wider text-gray-500 font-bold">Correo
+                            Electrónico</label>
+                        <input type="email" id="email" placeholder="usuario@ejemplo.com" required
+                            class="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-all placeholder-gray-700">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <label for="password"
+                                class="text-xs uppercase tracking-wider text-gray-500 font-bold">Contraseña</label>
+                        </div>
+                        <input type="password" id="password" placeholder="••••••••" required
+                            class="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-all placeholder-gray-700">
+                    </div>
+
+                    <button type="submit" id="submit-btn"
+                        class="w-full bg-gradient-to-r from-neon-blue to-neon-purple py-4 rounded-xl text-white font-bold tracking-wide hover:shadow-[0_0_20px_rgba(188,19,254,0.4)] transition-all transform hover:scale-[1.02]">
+                        Iniciar Sesión
+                    </button>
+
+                    <div id="error-msg" class="text-red-400 text-sm text-center hidden"></div>
+
+                </form>
+
+                <div class="mt-8 text-center pt-8 border-t border-white/5">
+                    <p class="text-gray-400 text-sm">
+                        <span id="toggle-text">¿No tienes una cuenta?</span>
+                        <a href="#" id="toggle-btn"
+                            class="text-white font-bold hover:underline decoration-neon-pink decoration-2 underline-offset-4">Regístrate</a>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- State Logic -->
+    <script src="js/state.js?v=2"></script>
+    <script>
+        // UI Logic for switching between Login and Register
+        const form = document.getElementById('auth-form');
+        const toggleBtn = document.getElementById('toggle-btn');
+        const title = document.getElementById('page-title');
+        const subtitle = document.getElementById('page-subtitle');
+        const submitBtn = document.getElementById('submit-btn');
+        const nameField = document.getElementById('name-field');
+        const avatarField = document.getElementById('avatar-field');
+        const errorMsg = document.getElementById('error-msg');
+        const toggleText = document.getElementById('toggle-text');
+
+        let isLoginMode = true;
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            updateUI();
+        });
+
+        function updateUI() {
+            if (isLoginMode) {
+                title.innerText = 'Bienvenido';
+                subtitle.innerText = 'Ingresa tus credenciales para continuar.';
+                submitBtn.innerText = 'Iniciar Sesión';
+                nameField.classList.add('hidden');
+                avatarField.classList.add('hidden');
+                toggleText.innerText = '¿No tienes una cuenta?';
+                toggleBtn.innerText = 'Regístrate';
+                document.getElementById('fullname').required = false;
+            } else {
+                title.innerText = 'Crear Cuenta';
+                subtitle.innerText = 'Únete a PRISMA hoy mismo.';
+                submitBtn.innerText = 'Registrarse';
+                nameField.classList.remove('hidden');
+                avatarField.classList.remove('hidden');
+                toggleText.innerText = '¿Ya tienes cuenta?';
+                toggleBtn.innerText = 'Inicia Sesión';
+                document.getElementById('fullname').required = true;
+            }
+            errorMsg.classList.add('hidden');
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const fullname = document.getElementById('fullname').value;
+
+            // Get selected avatar
+            const avatarInput = document.querySelector('input[name="avatar"]:checked');
+            const avatarUrl = avatarInput ? avatarInput.value : null;
+
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50');
+            submitBtn.innerText = 'Procesando...';
+
+            try {
+                if (isLoginMode) {
+                    const success = await AppState.login(email, password);
+                    if (success) {
+                        window.location.href = 'index.html#courses';
+                        return; // Should redirect, so stop here.
+                    }
+                } else {
+                    const success = await AppState.signUp(email, password, fullname, avatarUrl);
+                    if (success) {
+                        // Switch to login mode
+                        isLoginMode = true;
+                        updateUI();
+
+                        // Show Success Message explicitly AFTER updateUI
+                        // Mensaje de privacidad: No confirmamos si existe o no para proteger los datos.
+                        errorMsg.innerText = "Solicitud procesada. Si el correo es nuevo, recibirás un enlace de confirmación. Si ya tienes cuenta, intenta iniciar sesión.";
+                        errorMsg.classList.remove('hidden', 'text-red-400', 'text-neon-blue');
+                        errorMsg.classList.add('text-green-400');
+                    }
+                }
+            } catch (err) {
+                console.error('Login Error Trap v2:', err);
+
+                // Translate errors
+                let message = (err.message || "Error desconocido").toLowerCase();
+
+                if (message.includes("invalid login credentials") || message.includes("invalid claim")) {
+                    message = "Correo o contraseña incorrectos.";
+                } else if (message.includes("already registered") || message.includes("duplicate key") || message.includes("unique constraint")) {
+                    message = "Este correo ya está registrado. Intenta iniciar sesión.";
+                } else if (message.includes("password should be")) {
+                    message = "La contraseña debe tener al menos 6 caracteres.";
+                } else if (message.includes("email not confirmed")) {
+                    message = "Correo no confirmado. Revisa tu bandeja de entrada.";
+                } else if (message.includes("rate limit") || message.includes("too many requests")) {
+                    message = "Demasiados intentos. Espera un momento.";
+                } else {
+                    // Fallback to original message but capitalized
+                    message = err.message;
+                }
+
+                errorMsg.innerText = message;
+                errorMsg.classList.remove('hidden', 'text-green-400', 'text-neon-blue');
+                errorMsg.classList.add('text-red-400');
+            } finally {
+                // Always re-enable button unless we are effectively leaving the page
+                if (!window.location.hash.includes('courses')) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50');
+                    // Update button text logic is handled by updateUI, but if we failed/stayed on page:
+                    if (submitBtn.innerText === 'Procesando...') {
+                        submitBtn.innerText = isLoginMode ? 'Iniciar Sesión' : 'Registrarse';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
